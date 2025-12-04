@@ -16,6 +16,7 @@ docker compose up -d
 - Postgres: `localhost:5432`, 기본 DB/계정/비밀번호 `logforge` (환경 변수 `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`로 변경 가능)
 - Prometheus: `http://localhost:9090`
 - Grafana: `http://localhost:3000` (기본 계정 `admin` / `admin`, 환경 변수 `GRAFANA_ADMIN_USER`, `GRAFANA_ADMIN_PASSWORD`로 변경 가능)
+- Spring Batch 메타데이터: 컨테이너 최초 기동 시 `docker/initdb/01-batch-schema.sql`이 자동 적용되어 Batch 테이블이 생성된다.
 
 ## Prometheus 설정 수정
 - 파일: `docker/prometheus.yml`
