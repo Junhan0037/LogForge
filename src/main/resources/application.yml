@@ -27,6 +27,9 @@ spring:
   sql:
     init:
       mode: never # # 스키마/데이터 초기화는 마이그레이션 도구로 수행
+  flyway:
+    # PostgreSQL 16.x 호환 버전을 사용하도록 명시적으로 구성(드라이버는 build.gradle에서 버전 고정)
+    baseline-on-migrate: true
 
 server:
   port: ${SERVER_PORT:8080}
