@@ -1,0 +1,79 @@
+version: "3.9"
+name: logforge
+
+services:
+  # 애플리케이션용 기본 RDB(PostgreSQL). 데이터는 볼륨으로 영속화
+  postgres:
+    image: postgres:16
+    container_name: logforge-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-logforge}
+      POSTGRES_USER: ${POSTGRES_USER:-logforge}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-logforge}
+      PGDATA: /var/lib/postgresql/data/pgdata
+      TZ: Asia/Seoul
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-logforge} -d $${POSTGRES_DB:-logforge}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  # 메트릭 수집용 Prometheus. 로컬 앱(기본 8080) Actuator를 스크랩 대상으로 설정
+  prometheus:
+    image: prom/prometheus:v2.55.0
+    container_name: logforge-prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=15d"
+    ports:
+      - "9090:9090"
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "http://localhost:9090/-/healthy" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+
+  # 메트릭 시각화를 위한 Grafana. Prometheus 데이터소스는 프로비저닝으로 자동 등록
+  grafana:
+    image: grafana/grafana:11.2.0
+    container_name: logforge-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_USERS_DEFAULT_THEME: light
+      TZ: Asia/Seoul
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana-provisioning:/etc/grafana/provisioning
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "http://localhost:3000/api/health" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+    name: logforge-postgres-data
+  prometheus-data:
+    name: logforge-prometheus-data
+  grafana-data:
+    name: logforge-grafana-data

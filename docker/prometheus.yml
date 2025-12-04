@@ -1,0 +1,20 @@
+# Prometheus 기본 설정: 로컬 개발 환경에서 Spring Boot Actuator 메트릭을 스크랩한다.
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # 애플리케이션 메트릭 스크랩 타겟. 컨테이너화된 앱 사용 시 service name:8080으로 변경한다.
+  - job_name: "logforge-app"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets:
+          - "host.docker.internal:8080"
+        labels:
+          env: "local"
+
+  # Prometheus 자체 상태 모니터링
+  - job_name: "prometheus"
+    static_configs:
+      - targets:
+          - "localhost:9090"
