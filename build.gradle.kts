@@ -47,6 +47,11 @@ kotlin {
     }
 }
 
+/**
+ * Mockito ByteBuddy 에이전트 동적 로딩 경고를 억제하고 향후 JDK 기본 차단을 대비하기 위해 설정
+ * JDK 부트로더 classpath 공유 경고를 숨기기 위해 공유 기능을 비활성화
+ */
 tasks.withType<Test> {
+    jvmArgs("-XX:+EnableDynamicAgentLoading", "-Xshare:off")
     useJUnitPlatform()
 }
