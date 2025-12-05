@@ -45,3 +45,13 @@ logging:
     # 배치/SQL 로깅 기본 레벨을 설정해 노이즈를 줄이고, 문제 발생 시 환경 변수로 조정
     org.springframework.batch: INFO
     org.springframework.jdbc.core: WARN
+
+external:
+  client:
+    # 외부 로그 API 호출 정책 (코루틴 기반 WebClient)
+    max-concurrent-requests: 5
+    request-timeout-millis: 5000
+    retry-attempts: 3
+    retry-delay-millis: 200
+    connect-timeout-millis: 3000
+    response-timeout-millis: 5000
