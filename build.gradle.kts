@@ -41,6 +41,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0") // 외부 API Stub 서버 용도
+    testImplementation("com.h2database:h2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
