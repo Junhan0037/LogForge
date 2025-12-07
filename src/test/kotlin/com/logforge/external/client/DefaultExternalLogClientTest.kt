@@ -45,8 +45,8 @@ class DefaultExternalLogClientTest {
     fun `정상 응답을 수신하면 로그 리스트를 반환한다`() = runBlocking {
         val responseJson = """
             [
-              {"occurredAt":"2024-01-01T00:00:00Z","payload":"p1"},
-              {"occurredAt":"2024-01-01T01:00:00Z","payload":"p2"}
+              {"occurredAt":"2025-01-01T00:00:00Z","payload":"p1"},
+              {"occurredAt":"2025-01-01T01:00:00Z","payload":"p2"}
             ]
         """.trimIndent()
         mockWebServer.enqueue(
@@ -72,7 +72,7 @@ class DefaultExternalLogClientTest {
             MockResponse()
                 .setResponseCode(200)
                 .setHeader("Content-Type", "application/json")
-                .setBody("""[{"occurredAt":"2024-01-01T00:00:00Z","payload":"p1"}]""")
+                .setBody("""[{"occurredAt":"2025-01-01T00:00:00Z","payload":"p1"}]""")
         )
         stubTenant(baseUrl = mockWebServer.url("/").toString(), apiKey = "retry-key")
 
@@ -103,7 +103,7 @@ class DefaultExternalLogClientTest {
             MockResponse()
                 .setResponseCode(200)
                 .setHeader("Content-Type", "application/json")
-                .setBody("""[{"occurredAt":"2024-01-01T00:00:00Z","payload":"p1"}]""")
+                .setBody("""[{"occurredAt":"2025-01-01T00:00:00Z","payload":"p1"}]""")
                 .setBodyDelay(1500, TimeUnit.MILLISECONDS)
         )
         initClient(
