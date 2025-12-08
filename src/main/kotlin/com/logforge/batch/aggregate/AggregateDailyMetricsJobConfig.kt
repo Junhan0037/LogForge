@@ -1,5 +1,6 @@
 package com.logforge.batch.aggregate
 
+import com.logforge.batch.monitoring.BatchMetricsListener
 import com.logforge.domain.entity.TenantDailyMetric
 import org.slf4j.LoggerFactory
 import org.springframework.batch.core.Job
@@ -34,6 +35,7 @@ class AggregateDailyMetricsJobConfig(
     private val transactionManager: PlatformTransactionManager,
     private val dataSource: DataSource,
     private val tenantDailyMetricUpsertWriter: TenantDailyMetricUpsertWriter,
+    private val batchMetricsListener: BatchMetricsListener,
     @Value("\${batch.aggregate-daily-metrics.chunk-size:500}") private val chunkSize: Int
 ) {
 
@@ -46,6 +48,7 @@ class AggregateDailyMetricsJobConfig(
     @Bean
     fun aggregateDailyMetricsJob(): Job =
         JobBuilder("aggregateDailyMetricsJob", jobRepository)
+            .listener(batchMetricsListener)
             .incrementer(RunIdIncrementer())
             .validator(aggregateDailyMetricsJobParametersValidator())
             .start(aggregateDailyMetricsStep())
@@ -68,6 +71,7 @@ class AggregateDailyMetricsJobConfig(
             .reader(dailyMetricAggregationReader(null, null))
             .processor(dailyMetricAggregationProcessor())
             .writer(tenantDailyMetricUpsertWriter)
+            .listener(batchMetricsListener)
             .build()
 
     /**

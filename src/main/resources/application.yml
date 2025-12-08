@@ -38,7 +38,21 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,info,metrics" # 배치/운영 모니터링을 위해 기본 헬스/정보/메트릭 엔드포인트를 노출
+        include: "health,info,metrics,prometheus" # 배치/운영 모니터링을 위해 기본 헬스/정보/메트릭/프로메테우스 엔드포인트를 노출
+  endpoint:
+    health:
+      show-details: always # 헬스체크 상세 정보를 노출해 장애 지점 파악
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        batch.step.duration: true # 스텝 실행 시간 히스토그램을 활성화해 지연 구간을 관찰
+        batch.job.duration: true # 잡 실행 시간 히스토그램을 활성화해 SLA 모니터링에 활용
+  prometheus:
+    metrics:
+      export:
+        enabled: true # 프로메테우스 스크레이핑용 메트릭을 활성화
 
 logging:
   level:

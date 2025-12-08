@@ -1,5 +1,6 @@
 package com.logforge.batch.normalize
 
+import com.logforge.batch.monitoring.BatchMetricsListener
 import com.logforge.domain.entity.NormalizedEvent
 import com.logforge.domain.entity.RawLog
 import jakarta.persistence.EntityManagerFactory
@@ -36,6 +37,7 @@ class NormalizeLogsJobConfig(
     private val logNormalizer: LogNormalizer,
     private val normalizedEventWriter: NormalizedEventWriter,
     private val normalizeSkipListener: NormalizeSkipListener,
+    private val batchMetricsListener: BatchMetricsListener,
     @Value("\${batch.normalize-logs.chunk-size:500}") private val chunkSize: Int
 ) {
 
@@ -48,6 +50,7 @@ class NormalizeLogsJobConfig(
     @Bean
     fun normalizeLogsJob(): Job =
         JobBuilder("normalizeLogsJob", jobRepository)
+            .listener(batchMetricsListener)
             .incrementer(RunIdIncrementer())
             .validator(normalizeLogsJobParametersValidator())
             .start(normalizeLogsStep())
@@ -75,6 +78,7 @@ class NormalizeLogsJobConfig(
             .skipLimit(1_000)
             .skip(LogNormalizeException::class.java)
             .listener(normalizeSkipListener)
+            .listener(batchMetricsListener)
             .build()
 
     /**

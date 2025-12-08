@@ -1,5 +1,6 @@
 package com.logforge.batch.fetch
 
+import com.logforge.batch.monitoring.BatchMetricsListener
 import com.logforge.domain.service.TenantService
 import com.logforge.external.client.ExternalLogClient
 import kotlinx.coroutines.runBlocking
@@ -36,6 +37,7 @@ class FetchRawLogsJobConfig(
     private val tenantService: TenantService,
     private val externalLogClient: ExternalLogClient,
     private val rawLogWriter: RawLogWriter,
+    private val batchMetricsListener: BatchMetricsListener,
     @Value("\${batch.fetch-raw-logs.grid-size:4}") private val gridSize: Int
 ) {
 
@@ -48,6 +50,7 @@ class FetchRawLogsJobConfig(
     @Bean
     fun fetchRawLogsJob(): Job =
         JobBuilder("fetchRawLogsJob", jobRepository)
+            .listener(batchMetricsListener)
             .incrementer(RunIdIncrementer())
             .validator(fetchRawLogsJobParametersValidator())
             .start(fetchRawLogsMasterStep())
@@ -71,6 +74,7 @@ class FetchRawLogsJobConfig(
             .step(fetchRawLogsWorkerStep())
             .gridSize(gridSize)
             .taskExecutor(fetchRawLogsTaskExecutor())
+            .listener(batchMetricsListener)
             .build()
 
     /**
@@ -81,6 +85,7 @@ class FetchRawLogsJobConfig(
     fun fetchRawLogsWorkerStep(): Step =
         StepBuilder("fetchRawLogsWorkerStep", jobRepository)
             .tasklet(workerTasklet(), transactionManager)
+            .listener(batchMetricsListener)
             .build()
 
     /**
