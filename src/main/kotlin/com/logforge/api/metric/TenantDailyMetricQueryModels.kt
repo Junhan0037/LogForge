@@ -36,9 +36,6 @@ data class TenantDailyMetricResponse(
     val amountSum: BigDecimal
 ) {
     companion object {
-        /**
-         * TenantDailyMetric 엔티티를 API 응답으로 변환
-         */
         fun from(entity: TenantDailyMetric): TenantDailyMetricResponse =
             TenantDailyMetricResponse(
                 tenantId = entity.tenantId,

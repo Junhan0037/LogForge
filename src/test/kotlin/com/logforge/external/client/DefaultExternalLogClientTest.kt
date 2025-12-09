@@ -4,8 +4,8 @@ import com.logforge.domain.entity.Tenant
 import com.logforge.domain.entity.TenantStatus
 import com.logforge.domain.service.TenantService
 import com.logforge.external.config.ExternalClientProperties
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Semaphore
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -19,7 +19,6 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.netty.http.client.HttpClient
 import java.time.Duration
-import java.time.Instant
 import java.util.concurrent.TimeUnit
 
 class DefaultExternalLogClientTest {

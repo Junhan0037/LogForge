@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 
 /**
  * NormalizeLogsJob이 RawLog를 정규화해 NormalizedEvent로 저장하고,

@@ -1,11 +1,6 @@
 package com.logforge.domain.entity
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.Index
-import jakarta.persistence.Table
+import jakarta.persistence.*
 
 /**
  * 외부 로그 소스(테넌트) 정보를 보관하는 엔티티

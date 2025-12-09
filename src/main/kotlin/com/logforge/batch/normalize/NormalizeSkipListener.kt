@@ -33,12 +33,6 @@ class NormalizeSkipListener(
         logger.warn("정규화 실패 - tenantId={}, rawLogId={}, reason={}", item.tenantId, item.id, reason)
     }
 
-    private fun buildReason(t: Throwable): String =
-        when (t) {
-            is LogNormalizeException -> t.message
-            else -> "정규화 중 알 수 없는 오류: ${t.message}"
-        }
-
     /**
      * Reader 단계 Skip는 별도 처리 없이 로그 기록
      */
@@ -52,6 +46,12 @@ class NormalizeSkipListener(
     override fun onSkipInWrite(item: Any, t: Throwable) {
         logger.warn("NormalizedEvent Writer 단계에서 Skip 발생: {}", t.message)
     }
+
+    private fun buildReason(t: Throwable): String =
+        when (t) {
+            is LogNormalizeException -> t.message
+            else -> "정규화 중 알 수 없는 오류: ${t.message}"
+        }
 
     companion object {
         private const val MAX_REASON_LENGTH = 500

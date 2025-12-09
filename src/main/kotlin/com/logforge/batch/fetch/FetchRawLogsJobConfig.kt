@@ -10,10 +10,10 @@ import org.springframework.batch.core.JobParametersValidator
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.job.DefaultJobParametersValidator
 import org.springframework.batch.core.job.builder.JobBuilder
-import org.springframework.batch.core.step.builder.StepBuilder
 import org.springframework.batch.core.launch.support.RunIdIncrementer
 import org.springframework.batch.core.partition.support.Partitioner
 import org.springframework.batch.core.repository.JobRepository
+import org.springframework.batch.core.step.builder.StepBuilder
 import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.repeat.RepeatStatus
 import org.springframework.beans.factory.annotation.Value
@@ -112,8 +112,8 @@ class FetchRawLogsJobConfig(
 
         logger.info("원천 로그 수집 시작 - tenantId={}, from={}, to={}", tenantId, timeRange.from, timeRange.to)
 
+        // 코루틴 기반 외부 API 호출을 Tasklet 라이프사이클 내에서 동기적으로 수행해 트랜잭션 경계를 명확히 유지
         runBlocking {
-            // 코루틴 기반 외부 API 호출을 Tasklet 라이프사이클 내에서 동기적으로 수행해 트랜잭션 경계를 명확히 유지
             val logs = externalLogClient.fetchLogs(
                 tenantId = tenantId,
                 from = timeRange.from.toString(),

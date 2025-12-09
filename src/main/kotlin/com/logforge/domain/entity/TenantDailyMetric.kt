@@ -1,10 +1,6 @@
 package com.logforge.domain.entity
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Index
-import jakarta.persistence.Table
-import jakarta.persistence.UniqueConstraint
+import jakarta.persistence.*
 import java.math.BigDecimal
 import java.time.LocalDate
 

@@ -15,8 +15,8 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.batch.core.BatchStatus
 import org.springframework.batch.core.Job
-import org.springframework.batch.core.launch.JobLauncher
 import org.springframework.batch.core.JobParametersBuilder
+import org.springframework.batch.core.launch.JobLauncher
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest

@@ -29,7 +29,7 @@ class TenantDailyMetricUpsertWriter(
         val minDate = chunk.minOf { it.eventDate }
         val maxDate = chunk.maxOf { it.eventDate }
 
-        // 동일 키에 대한 기존 레코드를 선조회해 upsert 시 추가 쿼리를 줄이고 충돌을 회피
+        // 동일 키에 대한 기존 레코드를 선조회, upsert 시 추가 쿼리를 줄이고 충돌을 회피
         val existingMetrics = tenantDailyMetricRepository
             .findAllByTenantIdInAndEventDateBetweenAndEventTypeIn(tenantIds, minDate, maxDate, eventTypes)
             .associateBy { MetricKey(it.tenantId, it.eventDate, it.eventType) }

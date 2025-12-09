@@ -4,9 +4,9 @@ import com.logforge.domain.service.TenantService
 import com.logforge.external.config.ExternalClientProperties
 import com.logforge.external.dto.ExternalLogDto
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
-import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.withTimeout
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatusCode
